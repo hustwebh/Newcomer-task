@@ -1,0 +1,48 @@
+#main3{
+    display: flex;
+    flex-direction: column;
+    order: 3;
+    position: relative;
+    text-align: center;
+    height: 1089px;
+    box-sizing: border-box;
+    padding-bottom: 115px;
+}
+#prev1{
+    left: 5%;
+}
+#next1{
+    left: 90%;
+}
+#ListArea{
+    position: relative;
+    /* display: flex;
+    align-items:flex-end; */
+    margin: 100px auto 0;
+    width: 1350px;
+    height: 860px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+#ListPartul{
+    overflow-y: auto;
+    /* overflow-x: auto; */
+    /* overflow-x: hidden; */
+    position: absolute; /*绝对定位能使轮播部分脱离文档流而提升性能*/
+    width: 3610px;
+    height: inherit;
+    list-style: none;
+    display: flex;
+    align-items: flex-end;
+    margin: 0;
+    padding: 0;
+    transition: transform 0.5s ease-out ;
+}
+.ListPart{
+    position: relative;
+    margin-right: 20px;
+    transition: transform 0.5s ease-out;
+}
+.ListPart:hover{
+    transform: translateY(-20px);
+}    
