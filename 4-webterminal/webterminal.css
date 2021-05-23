@@ -1,0 +1,19 @@
+* {
+  cursor: text;
+}
+
+.input-text {
+  display: inline-block;
+  background-color: transparent;
+  border: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  outline: 0;
+  box-sizing: border-box;
+  font-size: 17px;
+  font-family: Monaco, Cutive Mono, Courier New, Consolas, monospace;
+  font-weight: 700;
+  color: #fff;
+  width: 300px;
+  padding-block-end: 0
+}
