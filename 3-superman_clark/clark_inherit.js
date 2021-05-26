@@ -1,14 +1,10 @@
-function Kryptonian() {
-    return this;
-}
+function Kryptonian() {}
 //以上创建Kryptonian这一函数对象
 
 Kryptonian.prototype.fly = function () { console.log("I can fly!")};
 //以Kryptonian为原型的一切实例都将从Kryptonian这里获得fly()方法
 
-function Superman() {
-    return this;
-}
+function Superman() {}
 ////以上创建Superman这一函数对象
 Superman.prototype.whoami = function () { console.log("I am superman!")};
 //以Superman为原型的一切实例都将从Superman这里获得whoami()方法
