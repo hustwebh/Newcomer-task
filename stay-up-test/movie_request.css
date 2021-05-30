@@ -1,0 +1,105 @@
+body{
+    background-color: rgb(227, 230, 231);
+}
+div{
+    display: block;
+    width: 100%;
+}
+h3{
+    margin: 0px;
+    font-size: 1.6em;
+    margin-top: 25px;
+}
+
+#main{
+    background-color: white;
+    width: 800px;
+    height: 390px;
+    border-radius: 10px;
+    margin: auto;
+    box-shadow: black;
+    box-shadow:2px 2px 5px #000;
+    z-index: 9;
+    overflow: hidden;
+}
+#picture{
+    position: relative;
+    width: 30%;
+    height: 100%;
+    position: relative;
+    float: left;
+    z-index: 5;
+}
+#back{
+    z-index: 6;
+    position: absolute;
+}
+#back img{
+    width: 400px;
+    height: 700px;
+    position: absolute;
+    z-index: 6;
+    left: -270px;
+    top:-190px;
+    transform: rotate(10deg);
+    filter: blur(10px);
+}
+#mov-img{
+    position: absolute;
+    margin-top: 80px;
+    margin-left: 50px;
+    width: 150px;
+    height: 200px;
+    z-index: 8;
+}
+#text{
+    width: 70%;
+    height: 100%;
+    position: relative;
+    background-color: white;
+    float: right;
+    z-index: 7;
+}
+#search{
+    position: relative;
+    display: block;
+    font-size: 90%;
+    height: 24px;
+    width: 170px;
+    top: 10px;
+    right: 20px;
+    float: right;
+    border: cornflowerblue solid 2px;
+    z-index: 10;
+}
+#title{
+    position: relative;
+    float:left;
+    font-size: 35px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin-bottom: 10px;
+}
+#time{
+    position: relative;
+    font-size: 10px;
+    margin-top: 75px;
+    color:rgb(180, 178, 176);
+    overflow: hidden;
+}
+.timein{
+    width: 100px;
+    float: left;
+}
+#intraduce{
+    position: relative;
+    font-family: 'Times New Roman', Times, serif;
+    margin-right: 30px;
+    margin-top: 13px;
+}
+.listhead{
+    position: relative;
+    margin-top: 20px;
+}
+.people{
+    display:inline
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>movie</title>
+    <link type="text/css" href="./second.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="main">
+      <div id="picture">
+        <div id="back">
+          <!--储存背景图片控制其旋转-->
+          <img id="back-img" src="" />
+        </div>
+        <img id="mov-img" src="" />
+      </div>
+      <div id="text">
+        <input id="search" type="text" name="search" value="good" onchange="movieSearch()"/>
+        <h3 id="title"></h3>
+        <div id="time">
+          <small>
+            <div id="Rated" class="timein"></div>
+            <div id="Year" class="timein"></div>
+            <div id="Genre" class="timein"></div>
+          </small>
+        </div>
+        <div id="intraduce"></div>
+        <div id="writer" class="listhead">
+          <div id="writer_name" class="people"></div>
+        </div>
+        <div id="director" class="listhead">
+          <div id="director_name" class="people"></div>
+        </div>
+        <div id="starring" class="listhead"></div>
+        <div id="actor" class="people"></div>
+      </div>
+    </div>
+    <script type="text/javascript" src="./request.js"></script>
+    <script type="text/javascript">
+      window.onload = function () {
+        movieSearch()
+          }
+    </script>
+    
+  </body>
+</html>
