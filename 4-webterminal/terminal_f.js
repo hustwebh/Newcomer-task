@@ -1,4 +1,6 @@
 import * as terminal_main from './terminal_main.js'
+let envirionment = "home";
+let a = localStorage;
 // const data = {
 //   value: '',
 // }
@@ -44,8 +46,7 @@ export function Events(input) {
     return;
   }
   if (/^rm\s.*$/.test(input)) {
-    madeRm(input);
-    console.log(1)
+    madeRm(input);    
     return;
   }
   if (/^touch\s.*$/.test(input)) {
@@ -56,16 +57,23 @@ export function Events(input) {
     madeCat(input);
     return;
   }
-  if(input.search(/>>/)) {
-    outputRedirection(input);
+  if (/^cd.*$/.test(input)) {
+    madeCd(input);
     return;
   }
+  // if(input.search(/>>/)) {
+  //   outputRedirection(input);
+  //   return;
+  // }
   switch (input) {
     case ``:
       addNewOne();
       break;
     case `clear`:
       toClear();
+      break;
+    case `pwd`:
+      madePwd(input);
       break;
     default:
       getError(input);
@@ -82,20 +90,30 @@ function madeLs(input) {
 
   let normal_file = new Array();
   let special_file = new Array();
-  for (let key in localStorage) {//这里key就是文件的name属性
-    // console.log(key);
-    if (!localStorage.hasOwnProperty(key)) {
-      continue; // 跳过像 "setItem"，"getItem" 等这样的键
+  let arr = envirionment.split("/");
+  // let directory = arr[arr.length - 1];
+  if (arr.length==1) {
+    for (let key in localStorage) {//这里key就是文件的name属性
+      if (!localStorage.hasOwnProperty(key)) {
+        continue; // 跳过像 "setItem"，"getItem" 等这样的键
+      }
+      if (/^\..*$/.test(key)) {
+        special_file.push(JSON.parse(localStorage.getItem(key)));
+      } else {
+        normal_file.push(JSON.parse(localStorage.getItem(key)));
+      }
     }
-    if (/^\..*$/.test(key)) {
-      special_file.push(JSON.parse(localStorage.getItem(key)));
-    } else {
-      normal_file.push(JSON.parse(localStorage.getItem(key)));
+  }else{
+    for(let i=0;i<directory.subordinate_files.length;i++){
+      if (/^\..*$/.test(directory.subordinate_files[i].name)) {
+        special_file.push(directory.subordinate_files[i]);
+      } else {
+        normal_file.push(directory.subordinate_files[i]);
+      }
     }
   }
-  // console.log(`test`);
-  if (input == `ls`) {
 
+  if (input == `ls`) {
     let replace_string = ``;
     for (let i = 0; i < normal_file.length; i++) {
       replace_string += `${normal_file[i].name}\t`;
@@ -107,12 +125,12 @@ function madeLs(input) {
     let replace_string = ``;
     for (let i = 0; i < normal_file.length; i++) {
       for (let key in normal_file[i]) {
-        if(key==`content`) continue;
-        replace_string += (normal_file[i][key]+"\t");
+        if (key == `father` || key == `content`) continue;
+        replace_string += (normal_file[i][key] + "  ");
       }
-      replace_string += "\n";
+      replace_string += "<br/>";
     }
-    // console.log(replace_string)
+    console.log(replace_string)
     terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
     ${replace_string}<br/>`
   }
@@ -120,7 +138,7 @@ function madeLs(input) {
     let replace_string = ``;
     let files = normal_file.concat(special_file);
     for (let i = 0; i < files.length; i++) {
-      replace_string += `${files[i].name}\t`;
+      replace_string += `${files[i].name}<br/>`;
     }
     terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
     ${replace_string}<br/>`
@@ -128,9 +146,43 @@ function madeLs(input) {
   terminal_main.input.value = ``;
 }
 
+/*
+*函数名称：madePwd;
+*效果：实现pwd命令效果;
+*返回值：无;
+*/
+function madePwd(input) {
+  terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
+  ${envirionment}<br/>`
+  terminal_main.input.value = ``;
+}
 
-
-
+/*
+*函数名称：madeCd;
+*效果：实现cd命令效果;
+*返回值：无;
+*/
+function madeCd(input) {
+  let cd_arr = input.substring(3).split(`/`);
+  for (let i = 0; i < cd_arr.length; i++) {
+    if (cd_arr[i] == ".") {
+      continue;
+    } else if (cd_arr[i] == "..") {
+      //返回上一级目录，若超过根目录则return
+      if (envirionment == `home/`) {
+        terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
+        you have just arrive home<br/>`
+        terminal_main.input.value = ``;
+        return;
+      }
+      envirionment = envirionment.split("/").pop().join("/");
+    } else {
+      envirionment += (`/` + cd_arr[i])
+    }
+  }
+  terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`
+  terminal_main.input.value = ``;
+}
 /*
 *函数名称：madeMkdir;
 *效果：实现mkdir命令效果;
@@ -138,8 +190,8 @@ function madeLs(input) {
 */
 function madeMkdir(input) {
   let new_name = input.substring(6);
-  if (terminal_main.envirionment != localStorage) {
-    terminal_main.envirionment.addFiles(new_name)
+  if (envirionment != localStorage) {
+    envirionment.addFiles(new_name)
   } else {
     localStorage.setItem(new_name, JSON.stringify(new terminal_main.Folder(new_name, [], `zyr`)));
   }
@@ -154,10 +206,32 @@ function madeMkdir(input) {
 */
 function madeRm(input) {
   let rm_name = input.substring(3);
-  if (terminal_main.envirionment != localStorage) {
-    terminal_main.envirionment.rmFiles(rm_name);
-  } else {
-    localStorage.removeItem(rm_name);
+  if(!(input.indexOf(`-`)>0)){
+    if (envirionment != `home`) {
+      envirionment.rmFiles(rm_name);
+    } else {
+      if(JSON.parse(localStorage.getItem(rm_name)) instanceof terminal_main.Folder){
+        console.log(1)
+        terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
+        ${re_name} is not a file`;
+        terminal_main.input.value = ``;
+        return;
+      }
+      localStorage.removeItem(rm_name);
+    }
+  }else{
+    //输入为-r
+    if (envirionment != `home`) {
+      envirionment.rmFiles(rm_name);
+    } else {
+      if(JSON.parse(localStorage.getItem(rm_name)) instanceof terminal_main.File){
+        terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
+        ${re_name} is not a folder`;
+        terminal_main.input.value = ``;
+        return;
+      }
+      localStorage.removeItem(rm_name);
+    }
   }
   terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
   terminal_main.input.value = ``;
@@ -189,24 +263,24 @@ function madeTouch(input) {
 *效果：实现cat命令;
 *返回值：无;
 */
-function madeCat(input){
+function madeCat(input) {
   let pur_file = input.substring(4);
   // console.log(pur_file);
   // console.log(JSON.parse(localStorage.getItem(pur_file)));
   // for (let key in localStorage) {
-    // console.log(key);
-    let pur_content = JSON.parse(localStorage.getItem(pur_file));
-    if (pur_content) {
-      console.log(1)
-      terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>\n
+  // console.log(key);
+  let pur_content = JSON.parse(localStorage.getItem(pur_file));
+  if (pur_content) {
+    console.log(1)
+    terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>\n
       ${pur_content.content}<br/>`;
-      terminal_main.input.value = ``;
-      return;
-    }else{
-      terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>\n
+    terminal_main.input.value = ``;
+    return;
+  } else {
+    terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>\n
       ${pur_file} is not exited<br/>`;
-      terminal_main.input.value = ``;
-      return;
+    terminal_main.input.value = ``;
+    return;
     // }
   }
 }
@@ -216,21 +290,21 @@ function madeCat(input){
 *效果：模拟输出重定向，改变File的content内容;
 *返回值：无;
 */
-function outputRedirection(input){
+function outputRedirection(input) {
   let print_file = input.match(/(\S*)>+/)[1];
   let recive_file = input.match(/>+(\S*)/)[1];
-  if((localStorage.getItem(print_file)) instanceof terminal_main.File &&
-  (localStorage.getItem(recive_file))instanceof terminal_main.File){
-    if(/*内含两个>>符号*/1){
-      recive_file.content+=print_file.content;
-    }else if(/*内含一个>符号*/2){
-      recive_file.content=print_file.content
+  if ((localStorage.getItem(print_file)) instanceof terminal_main.File &&
+    (localStorage.getItem(recive_file)) instanceof terminal_main.File) {
+    if (/*内含两个>>符号*/1) {
+      recive_file.content += print_file.content;
+    } else if (/*内含一个>符号*/2) {
+      recive_file.content = print_file.content
     }
-  }else{
+  } else {
     terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>\n
       this file is not exited<br/>`;
-      terminal_main.input.value = ``;
-      return;
+    terminal_main.input.value = ``;
+    return;
   }
 }
 
