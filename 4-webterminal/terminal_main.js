@@ -40,7 +40,11 @@ export class File {
 }
 let file1 = new File(`file1`,`zyr`, `qwe`);
 let file2 = new File(`file2`, `zyr`,`asd`);
+let file3 = new File(`file3`, `zyr`,` hallo world`);
+let file4 = new File(`file4`, `zyr`,` what happend`);
 let floder1 = new Folder(`floder1`, [file1, file2], `zyr`);
 let floder2 = new Folder(`.floder2`, [], `zyr`);
 window.localStorage.setItem(floder1.name, JSON.stringify(floder1));
 window.localStorage.setItem(floder2.name, JSON.stringify(floder2));
+window.localStorage.setItem(file3.name, JSON.stringify(file3));
+window.localStorage.setItem(file4.name, JSON.stringify(file4));

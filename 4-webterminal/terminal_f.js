@@ -43,13 +43,21 @@ export function Events(input) {
     madeMkdir(input);
     return;
   }
-  if (/rm\s.*$/.test(input)) {
+  if (/^rm\s.*$/.test(input)) {
     madeRm(input);
     console.log(1)
     return;
   }
-  if (/touch\s.*$/.test(input)) {
+  if (/^touch\s.*$/.test(input)) {
     madeTouch(input);
+    return;
+  }
+  if (/^cat\s.*$/.test(input)) {
+    madeCat(input);
+    return;
+  }
+  if(input.search(/>>/)) {
+    outputRedirection(input);
     return;
   }
   switch (input) {
@@ -75,6 +83,7 @@ function madeLs(input) {
   let normal_file = new Array();
   let special_file = new Array();
   for (let key in localStorage) {//这里key就是文件的name属性
+    // console.log(key);
     if (!localStorage.hasOwnProperty(key)) {
       continue; // 跳过像 "setItem"，"getItem" 等这样的键
     }
@@ -98,9 +107,12 @@ function madeLs(input) {
     let replace_string = ``;
     for (let i = 0; i < normal_file.length; i++) {
       for (let key in normal_file[i]) {
-        replace_string += normal_file[i][key];
+        if(key==`content`) continue;
+        replace_string += (normal_file[i][key]+"\t");
       }
+      replace_string += "\n";
     }
+    // console.log(replace_string)
     terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
     ${replace_string}<br/>`
   }
@@ -150,6 +162,7 @@ function madeRm(input) {
   terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
   terminal_main.input.value = ``;
 }
+
 /*
 *函数名称：madeTouch;
 *效果：实现touch命令效果;
@@ -170,6 +183,57 @@ function madeTouch(input) {
   terminal_main.input.value = ``;
   return;
 }
+
+/*
+*函数名称：madeCat;
+*效果：实现cat命令;
+*返回值：无;
+*/
+function madeCat(input){
+  let pur_file = input.substring(4);
+  // console.log(pur_file);
+  // console.log(JSON.parse(localStorage.getItem(pur_file)));
+  // for (let key in localStorage) {
+    // console.log(key);
+    let pur_content = JSON.parse(localStorage.getItem(pur_file));
+    if (pur_content) {
+      console.log(1)
+      terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>\n
+      ${pur_content.content}<br/>`;
+      terminal_main.input.value = ``;
+      return;
+    }else{
+      terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>\n
+      ${pur_file} is not exited<br/>`;
+      terminal_main.input.value = ``;
+      return;
+    // }
+  }
+}
+
+/*
+*函数名称：outputRedirection;
+*效果：模拟输出重定向，改变File的content内容;
+*返回值：无;
+*/
+function outputRedirection(input){
+  let print_file = input.match(/(\S*)>+/)[1];
+  let recive_file = input.match(/>+(\S*)/)[1];
+  if((localStorage.getItem(print_file)) instanceof terminal_main.File &&
+  (localStorage.getItem(recive_file))instanceof terminal_main.File){
+    if(/*内含两个>>符号*/1){
+      recive_file.content+=print_file.content;
+    }else if(/*内含一个>符号*/2){
+      recive_file.content=print_file.content
+    }
+  }else{
+    terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>\n
+      this file is not exited<br/>`;
+      terminal_main.input.value = ``;
+      return;
+  }
+}
+
 /*
 *函数名称：addNewOne;
 *效果：添加一个新的输入框，即重置输入;
