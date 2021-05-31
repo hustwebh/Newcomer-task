@@ -139,3 +139,4 @@ function resolvePromise(promise2, obj, reslove, reject) {
     resolve(x);
   }
 }
+module.exports = MyPromise;
