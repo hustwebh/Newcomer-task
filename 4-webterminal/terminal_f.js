@@ -1,9 +1,9 @@
 import * as terminal_main from './terminal_main.js'
 let envirionment = "home";
-let a = localStorage;
-// const data = {
-//   value: '',
-// }
+
+// console.log("terminal_f start")
+console.log(terminal_main.map)
+//error:can't access lexical declaration 'map' before initialization
 
 /*
 *函数名称：getInput;
@@ -11,7 +11,7 @@ let a = localStorage;
 *返回值：以输入为内容的一个字符串;
 */
 function getInput(event) {
-  if (event.keyCode == 13) {
+  if (event.keyCode === 13) {
     terminal_main.input.value = document.getElementsByClassName(`input-text`)[0].value;
     Events(terminal_main.input.value);
   }
@@ -91,8 +91,11 @@ function madeLs(input) {
   let normal_file = new Array();
   let special_file = new Array();
   let arr = envirionment.split("/");
-  // let directory = arr[arr.length - 1];
-  if (arr.length==1) {
+  // console.log(arr)
+  // console.log(arr[arr.length - 1])
+  
+  let directory = JSON.parse(terminal_main.map.get(arr[arr.length - 1]));
+  if (arr.length===1) {
     for (let key in localStorage) {//这里key就是文件的name属性
       if (!localStorage.hasOwnProperty(key)) {
         continue; // 跳过像 "setItem"，"getItem" 等这样的键
@@ -104,16 +107,16 @@ function madeLs(input) {
       }
     }
   }else{
-    for(let i=0;i<directory.subordinate_files.length;i++){
-      if (/^\..*$/.test(directory.subordinate_files[i].name)) {
-        special_file.push(directory.subordinate_files[i]);
+    for(let key in directory.subordinate_files){
+      if (/^\..*$/.test(key)) {
+        special_file.push(JSON.parse(directory.subordinate_files.get(key)));
       } else {
-        normal_file.push(directory.subordinate_files[i]);
+        normal_file.push(JSON.parse(directory.subordinate_files.get(key)));
       }
     }
   }
 
-  if (input == `ls`) {
+  if (input === `ls`) {
     let replace_string = ``;
     for (let i = 0; i < normal_file.length; i++) {
       replace_string += `${normal_file[i].name}\t`;
@@ -121,20 +124,19 @@ function madeLs(input) {
     terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
     ${replace_string}<br/>`
   }
-  if (input == `ls -l`) {
+  if (input === `ls -l`) {
     let replace_string = ``;
     for (let i = 0; i < normal_file.length; i++) {
       for (let key in normal_file[i]) {
-        if (key == `father` || key == `content`) continue;
-        replace_string += (normal_file[i][key] + "  ");
+        if (key === `father` || key === `content`) continue;
+        replace_string += (normal_file[i][key] + " ");
       }
       replace_string += "<br/>";
     }
-    console.log(replace_string)
     terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
     ${replace_string}<br/>`
   }
-  if (input == `ls -a`) {
+  if (input === `ls -a`) {
     let replace_string = ``;
     let files = normal_file.concat(special_file);
     for (let i = 0; i < files.length; i++) {
@@ -163,19 +165,21 @@ function madePwd(input) {
 *返回值：无;
 */
 function madeCd(input) {
-  let cd_arr = input.substring(3).split(`/`);
+  let cd_arr = input.substring(3).splitQQ图片20210601180742(`/`);
   for (let i = 0; i < cd_arr.length; i++) {
-    if (cd_arr[i] == ".") {
+    if (cd_arr[i] === ".") {
       continue;
-    } else if (cd_arr[i] == "..") {
+    } else if (cd_arr[i] === "..") {
       //返回上一级目录，若超过根目录则return
-      if (envirionment == `home/`) {
+      if (envirionment === `home`) {
         terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
         you have just arrive home<br/>`
         terminal_main.input.value = ``;
         return;
       }
-      envirionment = envirionment.split("/").pop().join("/");
+      // console.log(envirionment.split("/"))
+      // console.log(envirionment.split("/").pop())
+      // envirionment = envirionment.split("/").pop().join("/");
     } else {
       envirionment += (`/` + cd_arr[i])
     }
@@ -190,10 +194,13 @@ function madeCd(input) {
 */
 function madeMkdir(input) {
   let new_name = input.substring(6);
-  if (envirionment != localStorage) {
-    envirionment.addFiles(new_name)
+  if (envirionment !== `home`) {
+    // envirionment.addFiles(new_name)
+    let arr =envirionment.split("/");
+    let directory = JSON.parse(terminal_main.map.get(arr[arr.length - 1]));
+    directory.subordinate_files.set(new_name,JSON.stringify(new terminal_main.Folder(new_name,new Map(),`zyr`)));
   } else {
-    localStorage.setItem(new_name, JSON.stringify(new terminal_main.Folder(new_name, [], `zyr`)));
+    localStorage.setItem(new_name, JSON.stringify(new terminal_main.Folder(new_name,new Map(), `zyr`)));
   }
   terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
   terminal_main.input.value = ``;
@@ -207,26 +214,26 @@ function madeMkdir(input) {
 function madeRm(input) {
   let rm_name = input.substring(3);
   if(!(input.indexOf(`-`)>0)){
-    if (envirionment != `home`) {
+    if (envirionment !== `home`) {
       envirionment.rmFiles(rm_name);
     } else {
-      if(JSON.parse(localStorage.getItem(rm_name)) instanceof terminal_main.Folder){
+      if(JSON.parse(localStorage.getItem(rm_name)) instanceof terminal_main.Folder){//???
         console.log(1)
         terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
-        ${re_name} is not a file`;
+        ${rm_name} is not a file`;
         terminal_main.input.value = ``;
         return;
       }
       localStorage.removeItem(rm_name);
     }
   }else{
-    //输入为-r
-    if (envirionment != `home`) {
+    //输入带有-r
+    if (envirionment !== `home`) {
       envirionment.rmFiles(rm_name);
     } else {
       if(JSON.parse(localStorage.getItem(rm_name)) instanceof terminal_main.File){
         terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
-        ${re_name} is not a folder`;
+        ${rm_name} is not a folder`;
         terminal_main.input.value = ``;
         return;
       }
@@ -245,7 +252,7 @@ function madeRm(input) {
 function madeTouch(input) {
   let rep_file = input.substring(6);
   for (let key in localStorage) {
-    if (key.name == rep_file) {
+    if (key.name === rep_file) {
       key.date = new Date();
       terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
       terminal_main.input.value = ``;
@@ -271,7 +278,6 @@ function madeCat(input) {
   // console.log(key);
   let pur_content = JSON.parse(localStorage.getItem(pur_file));
   if (pur_content) {
-    console.log(1)
     terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>\n
       ${pur_content.content}<br/>`;
     terminal_main.input.value = ``;
