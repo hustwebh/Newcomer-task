@@ -1,11 +1,10 @@
-import * as terminal_f from "./terminal_f.js";
+
 export let map = new Map();
 
 export const count = 0;
 export const mainpart = document.getElementById(`main`);
 export const bodypart = document.getElementsByTagName(`body`);
 export const input = document.getElementsByClassName(`input-text`)[0];
-document.addEventListener("click", terminal_f.findFocus);
 
 export class Folder {
   constructor(name, owner) {
@@ -13,6 +12,7 @@ export class Folder {
     this.subordinate_files = new Map();
     this.owner = owner;
     this.date = new Date();
+    this.class = `folder`
   }
   addFiles(name, owner, content) {
     this.subordinate_files.set(
@@ -38,28 +38,25 @@ export class File {
     this.owner = owner;
     this.content = content;
     this.date = new Date();
+    this.class = `file`;
+    this.soft_link = false;
   }
 }
 
 let file3 = new File(`file3`, `zyr`, `hallo world`);
 let file4 = new File(`file4`, `zyr`, ` what happend`);
-let floder1 = new Folder(`floder1`, `zyr`);
-let floder2 = new Folder(`.floder2`, `zyr`);
-window.localStorage.setItem(floder1.name, JSON.stringify(floder1));
-map.set(floder1.name, JSON.stringify(floder1));
-window.localStorage.setItem(floder2.name, JSON.stringify(floder2));
-map.set(floder2.name, JSON.stringify(floder2));
+let folder1 = new Folder(`folder1`, `zyr`);
+let folder2 = new Folder(`.folder2`, `zyr`);
+window.localStorage.setItem(folder1.name, JSON.stringify(folder1));
+window.localStorage.setItem(folder2.name, JSON.stringify(folder2));
 window.localStorage.setItem(file3.name, JSON.stringify(file3));
-map.set(file3.name, JSON.stringify(file3));
 window.localStorage.setItem(file4.name, JSON.stringify(file4));
-map.set(file4.name, JSON.stringify(file4));
-floder1.addFiles(`file1`, `zyr`, `there is file1`);
-floder1.addFiles(`file2`, `zyr`, `there is file2`);
-// console.log(map)正常
-
-console.log(map);
-console.log("terminal_main start");
-for (let key of map.keys()) {
-  console.log(key);
-  console.log(map.get(key));
-}
+folder1.addFiles(`file1`, `zyr`, `there is file1`);
+// console.log(folder1.subordinate_files);
+folder1.addFiles(`file2`, `zyr`, `there is file2`);
+// console.log(folder1.subordinate_files);
+map.set(folder1.name,folder1);
+// console.log(map.get(`folder1`))
+map.set(file3.name,file3);
+map.set(folder2.name, folder2);
+map.set(file4.name, file4);

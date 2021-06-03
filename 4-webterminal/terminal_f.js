@@ -1,9 +1,8 @@
 import * as terminal_main from './terminal_main.js'
+document.addEventListener("click", findFocus);
 let envirionment = "home";
-
-// console.log("terminal_f start")
 console.log(terminal_main.map)
-//error:can't access lexical declaration 'map' before initialization
+// console.log(terminal_main.map.get(`floder1`).subordinate_files)
 
 /*
 *函数名称：getInput;
@@ -46,7 +45,7 @@ export function Events(input) {
     return;
   }
   if (/^rm\s.*$/.test(input)) {
-    madeRm(input);    
+    madeRm(input);
     return;
   }
   if (/^touch\s.*$/.test(input)) {
@@ -57,14 +56,18 @@ export function Events(input) {
     madeCat(input);
     return;
   }
+  if (/^ln\s.*$/.test(input)) {
+    madeLn(input);
+    return;
+  }
   if (/^cd.*$/.test(input)) {
     madeCd(input);
     return;
   }
-  // if(input.search(/>>/)) {
-  //   outputRedirection(input);
-  //   return;
-  // }
+  if(/.*>>.*/.test(input)|| /.*>.*/.test(input)) {
+    outputRedirection(input);
+    return;
+  }
   switch (input) {
     case ``:
       addNewOne();
@@ -91,11 +94,10 @@ function madeLs(input) {
   let normal_file = new Array();
   let special_file = new Array();
   let arr = envirionment.split("/");
-  // console.log(arr)
-  // console.log(arr[arr.length - 1])
-  
-  let directory = JSON.parse(terminal_main.map.get(arr[arr.length - 1]));
-  if (arr.length===1) {
+
+  let directory = terminal_main.map.get(arr[arr.length - 1]);
+  console.log(directory)
+  if (!directory) {
     for (let key in localStorage) {//这里key就是文件的name属性
       if (!localStorage.hasOwnProperty(key)) {
         continue; // 跳过像 "setItem"，"getItem" 等这样的键
@@ -106,19 +108,34 @@ function madeLs(input) {
         normal_file.push(JSON.parse(localStorage.getItem(key)));
       }
     }
-  }else{
-    for(let key in directory.subordinate_files){
+  } else {
+    // console.log(directory.subordinate_files)
+    for (let key of directory.subordinate_files.keys()) {
       if (/^\..*$/.test(key)) {
-        special_file.push(JSON.parse(directory.subordinate_files.get(key)));
+        console.log(directory.subordinate_files.get(key));
+        special_file.push(directory.subordinate_files.get(key));
       } else {
-        normal_file.push(JSON.parse(directory.subordinate_files.get(key)));
+        console.log(directory.subordinate_files.get(key))
+        normal_file.push(directory.subordinate_files.get(key));
       }
+    }
+    if (input === `ls`) {
+      let replace_string = ``;
+      for (let i = 0; i < normal_file.length; i++) {
+        console.log(normal_file[i]);
+        replace_string += `${JSON.parse(normal_file[i]).name}\t`;
+      }
+      terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
+      ${replace_string}<br/>`
+      terminal_main.input.value = ``;
+      return;
     }
   }
 
   if (input === `ls`) {
     let replace_string = ``;
     for (let i = 0; i < normal_file.length; i++) {
+      console.log(normal_file[i]);
       replace_string += `${normal_file[i].name}\t`;
     }
     terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
@@ -165,7 +182,8 @@ function madePwd(input) {
 *返回值：无;
 */
 function madeCd(input) {
-  let cd_arr = input.substring(3).splitQQ图片20210601180742(`/`);
+  let cd_arr = input.substring(3).split(`/`);
+  console.log(cd_arr)
   for (let i = 0; i < cd_arr.length; i++) {
     if (cd_arr[i] === ".") {
       continue;
@@ -177,9 +195,9 @@ function madeCd(input) {
         terminal_main.input.value = ``;
         return;
       }
-      // console.log(envirionment.split("/"))
-      // console.log(envirionment.split("/").pop())
-      // envirionment = envirionment.split("/").pop().join("/");
+      let arr = envirionment.split("/");
+      arr.pop();
+      envirionment = arr.join(`/`);
     } else {
       envirionment += (`/` + cd_arr[i])
     }
@@ -187,6 +205,7 @@ function madeCd(input) {
   terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`
   terminal_main.input.value = ``;
 }
+
 /*
 *函数名称：madeMkdir;
 *效果：实现mkdir命令效果;
@@ -195,12 +214,13 @@ function madeCd(input) {
 function madeMkdir(input) {
   let new_name = input.substring(6);
   if (envirionment !== `home`) {
-    // envirionment.addFiles(new_name)
-    let arr =envirionment.split("/");
-    let directory = JSON.parse(terminal_main.map.get(arr[arr.length - 1]));
-    directory.subordinate_files.set(new_name,JSON.stringify(new terminal_main.Folder(new_name,new Map(),`zyr`)));
+    let arr = envirionment.split("/");
+    let directory = terminal_main.map.get(arr[arr.length - 1]);
+    console.log(directory)
+    directory.subordinate_files.set(new_name, JSON.stringify(new terminal_main.Folder(new_name, `zyr`)));
   } else {
-    localStorage.setItem(new_name, JSON.stringify(new terminal_main.Folder(new_name,new Map(), `zyr`)));
+    localStorage.setItem(new_name, JSON.stringify(new terminal_main.Folder(new_name, `zyr`)));
+    terminal_main.map.set(new_name, new terminal_main.Folder(new_name, `zyr`));
   }
   terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
   terminal_main.input.value = ``;
@@ -212,26 +232,29 @@ function madeMkdir(input) {
 *返回值：无;
 */
 function madeRm(input) {
-  let rm_name = input.substring(3);
-  if(!(input.indexOf(`-`)>0)){
+  if (!(input.indexOf(`-`) > 0)) {
+    let rm_name = input.substring(3);
     if (envirionment !== `home`) {
-      envirionment.rmFiles(rm_name);
+      let arr = envirionment.split("/");
+      let dirractory = terminal_main.map.get(arr[arr.length-1])
+      dirractory.rmFiles(rm_name);
     } else {
-      if(JSON.parse(localStorage.getItem(rm_name)) instanceof terminal_main.Folder){//???
-        console.log(1)
+      // console.log(JSON.parse(localStorage.getItem(rm_name)).class);
+      if (JSON.parse(localStorage.getItem(rm_name)).class === `folder`) {
         terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
-        ${rm_name} is not a file`;
+        ${rm_name} is not a file<br/>`;
         terminal_main.input.value = ``;
         return;
       }
       localStorage.removeItem(rm_name);
     }
-  }else{
+  } else {
     //输入带有-r
+    let rm_name = input.substring(6);
     if (envirionment !== `home`) {
       envirionment.rmFiles(rm_name);
     } else {
-      if(JSON.parse(localStorage.getItem(rm_name)) instanceof terminal_main.File){
+      if (JSON.parse(localStorage.getItem(rm_name)).class === `file`) {
         terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
         ${rm_name} is not a folder`;
         terminal_main.input.value = ``;
@@ -251,18 +274,37 @@ function madeRm(input) {
 */
 function madeTouch(input) {
   let rep_file = input.substring(6);
-  for (let key in localStorage) {
-    if (key.name === rep_file) {
-      key.date = new Date();
-      terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
-      terminal_main.input.value = ``;
-      return;
+  if (envirionment !== `home`) {
+    let arr = envirionment.split("/");
+    let directory = terminal_main.map.get(arr[arr.length - 1]);
+    for (let key of directory.subordinate_files.keys()) {
+      if (rep_file === key) {
+        let obj = JSON.parse(localStorage.getItem(key));
+        obj.date = new Date();
+        terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
+        terminal_main.input.value = ``;
+        return;
+      }
     }
+    directory.subordinate_files.set(new_name, new terminal_main.Folder(new_name, `zyr`));
+    terminal_main.map.set(rep_file, new terminal_main.Folder(new_name, `zyr`));
+  } else {
+    for (let key in localStorage) {
+      if (key === rep_file) {
+        let obj = JSON.parse(localStorage.getItem(key));
+        obj.date = new Date();
+        terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
+        terminal_main.input.value = ``;
+        return;
+      }
+    }
+    localStorage.setItem(rep_file, JSON.stringify(new terminal_main.File(rep_file, `zyr`)))
+    terminal_main.map.set(rep_file,new terminal_main.File(rep_file, `zyr`))
+    console.log(terminal_main.map);
+    terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
+    terminal_main.input.value = ``;
+    return;
   }
-  localStorage.setItem(rep_file, JSON.stringify(new terminal_main.File(rep_file, `zyr`, ``)))
-  terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
-  terminal_main.input.value = ``;
-  return;
 }
 
 /*
@@ -272,12 +314,9 @@ function madeTouch(input) {
 */
 function madeCat(input) {
   let pur_file = input.substring(4);
-  // console.log(pur_file);
-  // console.log(JSON.parse(localStorage.getItem(pur_file)));
-  // for (let key in localStorage) {
-  // console.log(key);
-  let pur_content = JSON.parse(localStorage.getItem(pur_file));
-  if (pur_content) {
+  let pur_content = terminal_main.map.get(pur_file);
+  console.log(terminal_main.map.get(pur_file))//根据文件名字取得对象
+  if (pur_content.content) {
     terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>\n
       ${pur_content.content}<br/>`;
     terminal_main.input.value = ``;
@@ -297,18 +336,66 @@ function madeCat(input) {
 *返回值：无;
 */
 function outputRedirection(input) {
-  let print_file = input.match(/(\S*)>+/)[1];
-  let recive_file = input.match(/>+(\S*)/)[1];
-  if ((localStorage.getItem(print_file)) instanceof terminal_main.File &&
-    (localStorage.getItem(recive_file)) instanceof terminal_main.File) {
-    if (/*内含两个>>符号*/1) {
-      recive_file.content += print_file.content;
-    } else if (/*内含一个>符号*/2) {
-      recive_file.content = print_file.content
+  if(/.*>>.*/.test(input)){
+    let new_content = input.match(/(\w*).*>>.*/)[1];
+    let recive_file = input.match(/.*>>\s*(\w*)/)[1];
+    for(let key in localStorage){
+      if(key ===recive_file){
+        terminal_main.map.get(recive_file).content+=new_content;
+        terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
+        terminal_main.input.value = ``;
+        return;
+      }
     }
-  } else {
-    terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>\n
-      this file is not exited<br/>`;
+    terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
+      ${pur_file} is not exited<br/>`;
+    terminal_main.input.value = ``;
+    return;
+  }else{
+    let new_content = input.match(/(\w*).*>.*/)[1];
+    let recive_file = input.match(/.*>\s*(\w*)/)[1];
+    for(let key in localStorage){
+      if(key ===recive_file){
+        terminal_main.map.get(recive_file).content=new_content;
+        terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
+        terminal_main.input.value = ``;
+        return;
+      }
+    }
+    terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
+      ${pur_file} is not exited<br/>`;
+    terminal_main.input.value = ``;
+    return;
+  }
+}
+
+/*
+*函数名称：madeLn;
+*效果：实现ln命令效果;
+*返回值：无;
+*/
+function madeLn(input){
+  let arr = input.split(` `);
+  let target_file=JSON.parse(localStorage.getItem(arr[arr.length-2]));
+  let start_file=JSON.parse(localStorage.getItem(arr[arr.length-1]));
+  if(start_file&&target_file){
+    if(!(input.indexOf(`-`)>0)){ //建立硬链接
+//
+//
+      terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
+      terminal_main.input.value = ``;
+      return;
+    }else{
+      //
+      //
+      terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
+      terminal_main.input.value = ``;
+      return;
+    }
+
+  }else{
+    terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
+      ${start_file}or ${target_file} is not find<br/>`;
     terminal_main.input.value = ``;
     return;
   }
@@ -336,12 +423,13 @@ export function toClear() {
 /*
 *函数名称：toEcho;
 *效果：实现echo命令效果;
-*返回值：无;
+*返回值：echo命令后的字符串;
 */
 export function toEcho(input) {
   let printstring = input.substring(5);
   terminal_main.mainpart.innerHTML += "<span>></span>" + input + "<br/>" + printstring + "<br/>";
   terminal_main.input.value = ``;
+  return printstring;
 }
 
 /*
