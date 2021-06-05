@@ -22,11 +22,10 @@ export class Folder {
     map.set(name, JSON.stringify(new File(name, owner, this, content)));
   }
   rmFiles(name) {
-    for (let key in this.subordinate_files) {
-      if (key === name) {
+    for(let key in this.subordinate_files.keys()){
+      if(name === key){
         this.subordinate_files.delete(key);
-        map.delete(key);
-        return;
+        map.delete(key)
       }
     }
   }
