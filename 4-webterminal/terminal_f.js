@@ -64,6 +64,10 @@ export function Events(input) {
     madeCd(input);
     return;
   }
+  if (/^cp.*$/.test(input)) {
+    madeCp(input);
+    return;
+  }
   if(/.*>>.*/.test(input)|| /.*>.*/.test(input)) {
     outputRedirection(input);
     return;
@@ -236,8 +240,8 @@ function madeRm(input) {
     let rm_name = input.substring(3);
     if (envirionment !== `home`) {
       let arr = envirionment.split("/");
-      let dirractory = terminal_main.map.get(arr[arr.length-1])
-      dirractory.rmFiles(rm_name);
+      let diractory = terminal_main.map.get(arr[arr.length-1])
+      diractory.rmFiles(rm_name);
     } else {
       // console.log(JSON.parse(localStorage.getItem(rm_name)).class);
       if (JSON.parse(localStorage.getItem(rm_name)).class === `folder`) {
@@ -327,6 +331,44 @@ function madeCat(input) {
     terminal_main.input.value = ``;
     return;
     // }
+  }
+}
+
+/*
+*函数名称：madeCp;
+*效果：模拟cp命令;
+*返回值：无;
+*/
+function madeCp(input){
+  let start_file = input.match(/^cp.*\s(\w*)\s(.*)/)[1];
+  let end_plase = input.match(/^cp.*\s(\w*)\s(.*)/)[2];
+  console.log(terminal_main.map.get(start_file))
+  if(!(input.indexOf(`-`)>0)){
+    if(terminal_main.map.get(start_file).class !== `file`){
+      terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>\n
+        ${start_file} is not a file<br/>`;
+      terminal_main.input.value = ``;
+      return;
+    }else{
+      let arr = end_plase.split(`/`);
+      let plase = arr[arr.length-1];
+      let directory = terminal_main.map.get(plase);
+      directory.subordinate_files.set(start_file,
+        JSON.stringify(JSON.parse(JSON.stringify(terminal_main.map.get(start_file)))));
+        terminal_main.map.set(start_file,JSON.parse(JSON.stringify(terminal_main.map.get(start_file))))
+        terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
+      terminal_main.input.value = ``;
+      return;
+    }
+  }else{
+    if(terminal_main.map.get(start_file).class !== `folder`){
+      terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>\n
+        ${start_file} is not a folder<br/>`;
+      terminal_main.input.value = ``;
+      return;
+  }else{
+    
+    return;
   }
 }
 
