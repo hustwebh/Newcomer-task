@@ -31,19 +31,16 @@ em{
   width: auto;
   padding-left: 300px;
 }
-.learn{
-  position: absolute;
-  left: 8px;
-  width: 272px;
-  top: 8px;
-  /* left: -300px; */
-  padding: 10px;
-  border-radius: 5px;
-  background-color: rgba(255, 255, 255, .6);
-  transition-property: left;
-  transition-duration: 500ms;
-  /* display: block; */
-  width: 272px;
+.learn-bar > .learn {
+	position: absolute;
+	width: 272px;
+	top: 8px;
+	left: -300px;
+	padding: 10px;
+	border-radius: 5px;
+	background-color: rgba(255, 255, 255, .6);
+	transition-property: left;
+	transition-duration: 500ms;
 }
 .learn h3{
   font-size: 24px;
@@ -64,6 +61,10 @@ em{
   text-decoration: none;
   color: #b83f45;
   cursor: pointer;
+}
+.learn a:hover {
+	text-decoration: underline;
+	color: #787e7e;
 }
 .learn p{
   font-size: 15px;
@@ -90,13 +91,8 @@ em{
   border: none;
   margin: 20px 0 60px 0;
 }
-.quote p ::after{
-  content: '"';
-  font-size: 50px;
-  opacity: .15;
-  position: absolute;
-  bottom: -42px;
-  right: 3px;
+.quote p{
+  font-style: italic;  
 }
 .quote p ::before{
   content: '"';
@@ -106,14 +102,30 @@ em{
   top: -20px;
   left: 3px;
 }
-.quote p{
-  font-style: italic;
-  display: block;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
+.quote p ::after{
+  content: '"';
+  font-size: 50px;
+  opacity: .15;
+  position: absolute;
+  bottom: -42px;
+  right: 3px;
 }
 .quote footer{
   position: absolute;
   bottom: -40px;
   right: 0;
+}
+.quote footer a {
+	margin-left: 5px;
+	vertical-align: middle;
+}
+@media (min-width: 899px) {
+	.learn-bar {
+		width: auto;
+		padding-left: 300px;
+	}
+
+	.learn-bar > .learn {
+		left: 8px;
+	}
 }
