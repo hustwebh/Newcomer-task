@@ -32,6 +32,10 @@ export function findFocus() {
 *返回值：无;
 */
 export function Events(input) {
+  if(input.indexOf(`|`)>0){
+    madePipe(input);
+    return;
+  }
   if (/^echo\s.*$/.test(input)) {
     toEcho(input);
     return;
@@ -305,7 +309,7 @@ function madeTouch(input) {
         return;
       }
     }
-    localStorage.setItem(rep_file, JSON.stringify(new terminal_main.File(rep_file, `zyr`)))
+    localStorage.setItem(rep_file,JSON.stringify(new terminal_main.File(rep_file, `zyr`)))
     terminal_main.map.set(rep_file,new terminal_main.File(rep_file, `zyr`))
     console.log(terminal_main.map);
     terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
@@ -322,7 +326,7 @@ function madeTouch(input) {
 function madeCat(input) {
   let pur_file = input.substring(4);
   let pur_content = terminal_main.map.get(pur_file);
-  console.log(terminal_main.map.get(pur_file))//根据文件名字取得对象
+  console.log(terminal_main.map)//根据文件名字取得对象
   if (pur_content.content) {
     terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>\n
       ${pur_content.content}<br/>`;
@@ -334,6 +338,37 @@ function madeCat(input) {
     terminal_main.input.value = ``;
     return;
     // }
+  }
+}
+
+/*
+*函数名称：madeLn;
+*效果：实现ln命令效果;
+*返回值：无;
+*/
+function madeLn(input){
+  let arr = input.split(` `);
+  let target_file=JSON.parse(localStorage.getItem(arr[arr.length-2]));
+  let start_file=JSON.parse(localStorage.getItem(arr[arr.length-1]));
+  if(start_file&&target_file){
+    if(!(input.indexOf(`-`)>0)){
+      terminal_main.map.set(start_file.name,terminal_main.map.get(target_file.name))
+      terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
+      terminal_main.input.value = ``;
+      return;
+    }else{//建立软链接
+      //
+      //
+      terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
+      terminal_main.input.value = ``;
+      return;
+    }
+
+  }else{
+    terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
+      ${start_file}or ${target_file} is not find<br/>`;
+    terminal_main.input.value = ``;
+    return;
   }
 }
 
@@ -425,37 +460,24 @@ function outputRedirection(input) {
 }
 
 /*
-*函数名称：madeLn;
-*效果：实现ln命令效果;
+*函数名称：madePipe;
+*效果：实现管道效果;
 *返回值：无;
 */
-function madeLn(input){
-  let arr = input.split(` `);
-  let target_file=JSON.parse(localStorage.getItem(arr[arr.length-2]));
-  let start_file=JSON.parse(localStorage.getItem(arr[arr.length-1]));
-  if(start_file&&target_file){
-    if(!(input.indexOf(`-`)>0)){ //建立硬链接
-//
-//
-      terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
-      terminal_main.input.value = ``;
-      return;
+function madePipe(input){
+  let arr = input.split(`|`);
+  for(let i=0;i<arr.length;i++){
+    arr[i]= arr[i].trim();
+  }
+  let a = Events(arr[0]);
+  for(let i=0;i<arr.length;i++){
+    if(a!==undefined){
+      a = Events(a);
     }else{
-      //
-      //
-      terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
-      terminal_main.input.value = ``;
-      return;
+      a = Events(arr[i+1]);
     }
-
-  }else{
-    terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
-      ${start_file}or ${target_file} is not find<br/>`;
-    terminal_main.input.value = ``;
-    return;
   }
 }
-
 /*
 *函数名称：addNewOne;
 *效果：添加一个新的输入框，即重置输入;
