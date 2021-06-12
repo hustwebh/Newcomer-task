@@ -17,7 +17,7 @@ export class Folder {
   addFiles(name, owner, content) {
     this.subordinate_files.set(
       name,
-      JSON.stringify(new File(name, owner, this, content))
+      new File(name, owner, this, content)
     );
     map.set(name, JSON.stringify(new File(name, owner, this, content)));
   }

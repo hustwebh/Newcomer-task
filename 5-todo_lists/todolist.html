@@ -52,7 +52,42 @@
       <h1>todos</h1>
       <input class="new-todo" placeholder="what needs to be done?" autofocus="">
     </header>
-    <section class="main" style="display: none;"></section>
+    <section class="main" style="display: block;">
+      <input id="toggle-all" class="toggle-all" type="checkbox">
+      <label for="toggle-all">Mark all as complete</label>
+      <ul class="todo-list">
+        <!-- <li class="completed">
+          <div class="view">
+            <input class="toggle" type="checkbox" checked="">
+            <label>qwer</label>
+            <button class="destroy"></button>
+          </div>
+        </li>
+        <li>
+          <div class="view">
+            <input class="toggle" type="checkbox">
+            <label>asd</label>
+            <button class="destroy"></button>
+          </div>
+        </li> -->
+      </ul>
+      <footer class="list-foot">
+        <span class="todo-count">0 items left</span>
+        <ul class="filters">
+          <li>
+            <a href="#/" class="selected">All</a>
+          </li>
+          <li>
+            <a href="#/active" class="">Active</a>
+          </li>
+          <li>
+            <a href="#/completed" class="">Completed</a>
+          </li>
+        </ul>
+        <button class="clear-completed" style="display: none;">Clear completed
+        </button>
+      </footer>
+    </section>
   </section>
   <footer class="info">
     <p>Double-click to edit a todo</p>
@@ -69,6 +104,10 @@
       <a href="http://todomvc.com">TodoMVC</a>
     </p>
   </footer>
+  <script type="moudle" src="js/controller.js"></script>
+  <script>
+  const controller = new Controller();
+  </script>
 </body>
 
 </html>

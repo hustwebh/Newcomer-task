@@ -37,8 +37,7 @@ export function Events(input) {
     return;
   }
   if (/^echo\s.*$/.test(input)) {
-    toEcho(input);
-    return;
+    return toEcho(input)      ;
   }
   if (/^ls.*$/.test(input)) {
     madeLs(input);
@@ -105,7 +104,7 @@ function madeLs(input) {
 
   let directory = terminal_main.map.get(arr[arr.length - 1]);
   console.log(directory)
-  if (!directory) {
+  if (directory === undefined) {
     for (let key in localStorage) {//这里key就是文件的name属性
       if (!localStorage.hasOwnProperty(key)) {
         continue; // 跳过像 "setItem"，"getItem" 等这样的键
@@ -117,13 +116,13 @@ function madeLs(input) {
       }
     }
   } else {
-    // console.log(directory.subordinate_files)
     for (let key of directory.subordinate_files.keys()) {
+      console.log(directory.subordinate_files)
       if (/^\..*$/.test(key)) {
-        console.log(directory.subordinate_files.get(key));
+        // console.log(directory.subordinate_files.get(key));
         special_file.push(directory.subordinate_files.get(key));
       } else {
-        console.log(directory.subordinate_files.get(key))
+        // console.log(directory.subordinate_files.get(key));
         normal_file.push(directory.subordinate_files.get(key));
       }
     }
@@ -131,7 +130,7 @@ function madeLs(input) {
       let replace_string = ``;
       for (let i = 0; i < normal_file.length; i++) {
         console.log(normal_file[i]);
-        replace_string += `${JSON.parse(normal_file[i]).name}\t`;
+        replace_string += `${normal_file[i].name}\t`;
       }
       terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>
       ${replace_string}<br/>`
@@ -297,8 +296,8 @@ function madeTouch(input) {
         return;
       }
     }
-    directory.subordinate_files.set(new_name, new terminal_main.Folder(new_name, `zyr`));
-    terminal_main.map.set(rep_file, new terminal_main.Folder(new_name, `zyr`));
+    directory.subordinate_files.set(rep_file, new terminal_main.File(rep_file, `zyr`));
+    terminal_main.map.set(rep_file, new terminal_main.File(rep_file, `zyr`));
   } else {
     for (let key in localStorage) {
       if (key === rep_file) {
@@ -312,10 +311,10 @@ function madeTouch(input) {
     localStorage.setItem(rep_file,JSON.stringify(new terminal_main.File(rep_file, `zyr`)))
     terminal_main.map.set(rep_file,new terminal_main.File(rep_file, `zyr`))
     console.log(terminal_main.map);
-    terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
+  }
+  terminal_main.mainpart.innerHTML += `<span>></span> ${input}<br/>`;
     terminal_main.input.value = ``;
     return;
-  }
 }
 
 /*
@@ -472,7 +471,7 @@ function madePipe(input){
   let a = Events(arr[0]);
   for(let i=0;i<arr.length;i++){
     if(a!==undefined){
-      a = Events(a);
+      a = Events(arr[i + 1] + a);
     }else{
       a = Events(arr[i+1]);
     }
