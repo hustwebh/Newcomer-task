@@ -1,7 +1,7 @@
 // import {Todo} from "./todo";
-import {Store,Todo} from "./store";
+import {Store,Todo} from "./store.js";
 
-export class Controller {
+export class todoList {
 
     constructor() {
         this.store = new Store(() => this.refreshCounterAndList());    
@@ -38,16 +38,14 @@ export class Controller {
         this.btnFilterCompleted.addEventListener('click', (evnet) => this.filterTodo(evnet.target, 'completed'));
     }
 
-    refreshCounterAndList() {
+    refreshCounterAndList() { //返回对左下未完成任务数量计数
         const todos = this.store.getAllTodos();
         let itemsUnchecked = 0;
-
         todos.forEach(item => {
             if (!item.checked) {
                 itemsUnchecked++;
             }
         });
-
         this.mainSection.style.display = todos.length > 0 ? 'block' : 'none';
         this.itemLeft.innerText = itemsUnchecked + ' item' + (itemsUnchecked < 0 ? 's' : '') + ' left';
     }
@@ -59,14 +57,14 @@ export class Controller {
     }
 
 
-    addTodo(todo) {
+    addTodo(todo) {//添加任务
         let li = document.createElement('li');
         li.setAttribute('data-id', todo.id);
 
         let input = document.createElement('input');
         input.type = 'checkbox';
         input.classList.add('toggle');
-        input.addEventListener('click', () => this.toggleTodo(todo.id));
+        input.addEventListener('click', () => this.toggleLi(todo.id));
 
         if (todo.checked) {
             input.setAttribute('checked', 'checked');
@@ -79,12 +77,11 @@ export class Controller {
 
         let button = document.createElement('button');
         button.classList.add('destroy');
-        button.addEventListener('click', () => this.removeTodo(todo.id));
+        button.addEventListener('click', () => this.removeLi(todo.id));
 
         li.appendChild(input);
         li.appendChild(label);
         li.appendChild(button);
-
         this.todoList.appendChild(li);
     }
 
@@ -124,10 +121,9 @@ export class Controller {
         }
     }
 
-    toggleTodo(id) {
-        let li = this.todoList.querySelector("li[data-id='" + id + "']");
+    toggleLi(id) { //点击将任务变为已完成状态
+        let li = this.todoList.querySelector(`li[data-id='${id}']`);
         let isChecked = this.store.toggleTodo(id);
-
         if (isChecked) {
             li.classList.add('completed');
         } else {
@@ -135,43 +131,39 @@ export class Controller {
         }
     }
 
-    editTodo(todo) {
+    editTodo(todo) { //实现对任务的编辑功能
         let li = this.todoList.querySelector(`li[data-id='${todo.id}']`);
         li.classList.add('editing');
-
         let input = document.createElement('input');
         input.classList.add('edit');
         input.value = todo.content;
-        // input.addEventListener('blur', (evnet) => this.stopEditing(todo.id, evnet.target.value));
-        input.addEventListener('keypress', (event) => {
-            if (event.keyCode === 13) {
-                this.stopEditing(todo.id, event.target.value)
-            }
-        });
-
+        input.addEventListener('blur', (evnet) => this.stopEditing(todo.id, evnet.target.value));
+        // input.addEventListener('keypress', (event) => {
+        //     if (event.keyCode === 13) {
+        //         this.stopEditing(todo.id, event.target.value)
+        //     }
+        // });
         li.appendChild(input);
         li.querySelector('.edit').focus();
     }
 
-    stopEditing(id, newContent) {
+    stopEditing(id, newContent) {  //设置从编辑状态返回正常状态
         let li = this.todoList.querySelector(`li[data-id='${id}']`);
         li.classList.remove('editing');
         li.querySelector('.edit').remove();
         li.querySelector('label').innerText = newContent;
-
         this.store.editTodo(id, newContent);
     }
 
-    removeTodo(id) {
+    removeLi(id) { //删除某个目标li元素
         this.todoList.querySelector(`li[data-id='${id}']`).remove();
         this.store.removeTodo(id);
     }
 
-    clearAllCompleted() {
+    clearAllCompleted() { //去除所有已完成任务
         this.todoList.querySelectorAll("li.completed").forEach(el => {
            el.remove();
         });
-
         this.store.clearAllCompleted();
     }
 }

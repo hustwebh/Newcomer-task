@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body{
+        background-color: blue;
+      }
+      #taichi{
+        width: 0;
+        height: 500px;
+        border-left: 250px solid #fff;
+        border-right: 250px solid #000;
+        border-radius: 50%;
+      }
+      #taichi {
+      width: 0;
+      height: 500px;
+      border-left: 250px solid #fff;
+      border-right: 250px solid #000;
+      border-radius: 50%;
+    }
+
+    #taichi::before {
+      content: " ";
+      display: block;
+      width: 250px;
+      height: 250px;
+      border: 90px solid #000;
+      background: #fff;
+      border-radius: 50%;
+      box-sizing: border-box;
+      margin-left: -130px;
+    }
+    #taichi::after{
+    content: " ";
+    display: block;
+    width: 250px;
+    height: 250px;
+    border: 90px solid #fff;
+    background: #000;
+    border-radius: 50%;
+    box-sizing: border-box;
+    margin-left: -130px;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="taichi"></div>
+  </body>
+</html>

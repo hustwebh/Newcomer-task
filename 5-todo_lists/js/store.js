@@ -1,7 +1,7 @@
-const uuidv4 = require('uuid/v4');//生成唯一识别码
+// const uuidv4 = require('uuid/v4');//生成唯一识别码
 export class Todo {  //定义每个新添加的事件结构
 
-  constructor({id = uuidv4(), content = '', checked = false}) {
+  constructor({id = Math.random().toString(), content = '', checked = false}) {
       this.id = id;
       this.content = content;
       this.checked = checked;
@@ -13,7 +13,7 @@ export class Todo {  //定义每个新添加的事件结构
 export class Store {
 
   constructor(callback) {
-    this.LSKEY_TODO = 'todo-list'
+      this.LSKEY_TODO = 'todo-list'
       this.todoList = JSON.parse(window.localStorage.getItem('todo-list')) || new Array();
       this.refreshCallback = callback;
   }
