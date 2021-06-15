@@ -1,10 +1,10 @@
 // import {Todo} from "./todo";
-import {Store,Todo} from "./store.js";
+import { Store, Todo } from "./store.js";
 
 export class todoList {
 
     constructor() {
-        this.store = new Store(() => this.refreshCounterAndList());    
+        this.store = new Store(() => this.refreshCounterAndList());
         this.getElements();
         this.addListenners();
         this.initList();
@@ -24,7 +24,7 @@ export class todoList {
     addListenners() {
         this.newTodoInput.addEventListener('keypress', (event) => {
             if (event.keyCode === 13) {
-                const item =  new Todo({   //生成一个列表对象
+                const item = new Todo({   //生成一个列表对象
                     content: this.newTodoInput.value
                 });
                 this.store.addTodo(item);
@@ -47,7 +47,7 @@ export class todoList {
             }
         });
         this.mainSection.style.display = todos.length > 0 ? 'block' : 'none';
-        this.itemLeft.innerText = itemsUnchecked + ' item' + (itemsUnchecked < 0 ? 's' : '') + ' left';
+        this.itemLeft.innerText = itemsUnchecked + ' item' + ' left';
     }
 
     initList() {//初始化列表
@@ -98,7 +98,6 @@ export class todoList {
             case 'all':
                 this.todoList.querySelectorAll("li").forEach(el => el.style.display = 'block');
                 break;
-
             case 'active':
                 this.todoList.querySelectorAll("li").forEach(el => {
                     if (el.classList.contains('completed')) {
@@ -108,7 +107,6 @@ export class todoList {
                     }
                 });
                 break;
-
             case 'completed':
                 this.todoList.querySelectorAll("li").forEach(el => {
                     if (el.classList.contains('completed')) {
@@ -162,7 +160,7 @@ export class todoList {
 
     clearAllCompleted() { //去除所有已完成任务
         this.todoList.querySelectorAll("li.completed").forEach(el => {
-           el.remove();
+            el.remove();
         });
         this.store.clearAllCompleted();
     }

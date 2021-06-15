@@ -1,5 +1,5 @@
 // const uuidv4 = require('uuid/v4');//生成唯一识别码
-export class Todo {  //定义每个新添加的事件结构
+ export class Todo {  //定义每个新添加的事件结构
 
   constructor({id = Math.random().toString(), content = '', checked = false}) {
       this.id = id;
