@@ -133,3 +133,8 @@
 //   ul.innerHTML += str;
 // }
 // filters.addEventListener('click', filtersChange);
+
+
+
+const config = require("webpack.config.js")
+console.log(config);

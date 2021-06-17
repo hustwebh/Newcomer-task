@@ -1,9 +1,18 @@
-const path = require('path');
+// const path = require('path');
+// const {config} = require('process');
 
-module.exports = {
+
+const config = {
   entry: './src/app.js',
   output: {
-    path: path.resolve(__dirname,'dist'),
+    path: '/home/zyr/new-comer-task/5-todo_lists/qwe',
     filename: 'app.js'
-  }
+  },
+  module:{
+    rules:[
+      {test:/\.css$/,use: 'css-loader'}
+    ]
+  },
+  mode:'development'
 };
+module.exports = config;

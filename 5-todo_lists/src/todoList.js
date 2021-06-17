@@ -1,4 +1,3 @@
-// import {Todo} from "./todo";
 import { Store, Todo } from "./store.js";
 
 export class todoList {
@@ -18,6 +17,7 @@ export class todoList {
         this.btnFilterAll = document.querySelector('.filter-all');//All按钮
         this.btnFilterActive = document.querySelector('.filter-active');//Active按钮
         this.btnFilterCompleted = document.querySelector('.filter-completed');//Complete按钮
+        this.btnCompleteAll = document.querySelector('#toggle-all');//输入框前按钮，点击全部完成
         this.itemLeft = document.querySelector('.todo-count');
     }
 
@@ -36,6 +36,7 @@ export class todoList {
         this.btnFilterAll.addEventListener('click', (evnet) => this.filterTodo(evnet.target, 'all'));
         this.btnFilterActive.addEventListener('click', (evnet) => this.filterTodo(evnet.target, 'active'));
         this.btnFilterCompleted.addEventListener('click', (evnet) => this.filterTodo(evnet.target, 'completed'));
+        this.btnCompleteAll.addEventListener('click', () => this.completeLi());
     }
 
     refreshCounterAndList() { //返回对左下未完成任务数量计数
@@ -59,7 +60,7 @@ export class todoList {
 
     addTodo(todo) {//添加任务
         let li = document.createElement('li');
-        li.setAttribute('data-id', todo.id);
+        li.setAttribute('id', todo.id);
 
         let input = document.createElement('input');
         input.type = 'checkbox';
@@ -120,7 +121,7 @@ export class todoList {
     }
 
     toggleLi(id) { //点击将任务变为已完成状态
-        let li = this.todoList.querySelector(`li[data-id='${id}']`);
+        let li = this.todoList.querySelector(`li[id='${id}']`);
         let isChecked = this.store.toggleTodo(id);
         if (isChecked) {
             li.classList.add('completed');
@@ -129,24 +130,34 @@ export class todoList {
         }
     }
 
+    completeLi() {
+        let iscomplete = false;
+        this.todoList.querySelectorAll("li").forEach(el =>{
+            if (!el.classList.contains('completed')) {
+                // el.style.backgroundImage = `url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E')`;
+                // el.style.backgroundPosition = `center left`;
+                // el.style.backgroundRepeat = `no-repeat`;
+                // el.classList.add('completed')
+                console.log(el.children[0].onclick)
+                // el.children[0].onclick();
+            }
+        });
+        iscomplete = !iscomplete;
+    }
+
     editTodo(todo) { //实现对任务的编辑功能
-        let li = this.todoList.querySelector(`li[data-id='${todo.id}']`);
+        let li = this.todoList.querySelector(`li[id='${todo.id}']`);
         li.classList.add('editing');
         let input = document.createElement('input');
         input.classList.add('edit');
         input.value = todo.content;
         input.addEventListener('blur', (evnet) => this.stopEditing(todo.id, evnet.target.value));
-        // input.addEventListener('keypress', (event) => {
-        //     if (event.keyCode === 13) {
-        //         this.stopEditing(todo.id, event.target.value)
-        //     }
-        // });
         li.appendChild(input);
         li.querySelector('.edit').focus();
     }
 
     stopEditing(id, newContent) {  //设置从编辑状态返回正常状态
-        let li = this.todoList.querySelector(`li[data-id='${id}']`);
+        let li = this.todoList.querySelector(`li[id='${id}']`);
         li.classList.remove('editing');
         li.querySelector('.edit').remove();
         li.querySelector('label').innerText = newContent;
@@ -154,7 +165,7 @@ export class todoList {
     }
 
     removeLi(id) { //删除某个目标li元素
-        this.todoList.querySelector(`li[data-id='${id}']`).remove();
+        this.todoList.querySelector(`li[id='${id}']`).remove();
         this.store.removeTodo(id);
     }
 
