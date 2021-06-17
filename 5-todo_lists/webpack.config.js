@@ -1,4 +1,5 @@
 const path = require('path');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 
 const config = {
@@ -18,6 +19,9 @@ const config = {
       }
     ]
   },
+  plugins: [
+         new CleanWebpackPlugin(['dist']),
+        ],
   mode: 'development'
 };
 module.exports = config;
