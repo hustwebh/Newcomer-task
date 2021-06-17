@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Vanilla ES6 TodoMVC</title>
+  <!-- <base href="/"> -->
+  <!-- <link rel="stylesheet" href="css/aside.css" /> -->
+  <!-- <link rel="stylesheet" href="css/index.css" /> -->
+</head>
+
+<body class="learn-bar">
+  <aside class="learn">
+    <header>
+      <h3>ECMAScript 6</h3>
+      <span class="source-links">
+        <h5>Vanilla ES6 Example</h5>
+        <a href="#">Source</a>
+      </span>
+    </header>
+    <hr>
+    <blockquote class="quote speech-bubble">
+      <p>
+        <!-- ::before -->
+        The ECMAScript 6 (ES2015)
+        standard was ratified in 2015
+        following years of work standardizing improvements
+        to ECMAScript 3. The committee
+        introduced a wide variety
+        of improvements such as arrow
+        functions, const declarations,
+        and native Promises.
+        <!-- ::after -->
+      </p>
+      <footer>
+        <a href="#">ECMAScript 6</a>
+      </footer>
+      <!-- ::after -->
+    </blockquote>
+    <footer>
+      <hr>
+      <em>
+        If you have other helpful links to
+        share, or find any of the links above
+        no longer work, please
+        <a href="#">let us know</a>.
+      </em>
+    </footer>
+
+  </aside>
+  <section class="todoapp">
+    <header class="header">
+      <h1>todos</h1>
+      <input class="new-todo" placeholder="what needs to be done?" autofocus="">
+    </header>
+    <section class="main" style="display: block;">
+      <input id="toggle-all" class="toggle-all" type="checkbox">
+      <label for="toggle-all">Mark all as complete</label>
+      <ul class="todo-list"></ul>
+      <footer class="list-foot">
+        <span class="todo-count">0 item left</span>
+        <ul class="filters">
+          <li class="filter-all">
+            <a href="#/" class="selected">All</a>
+          </li>
+          <li class="filter-active">
+            <a href="#/active" class="">Active</a>
+          </li>
+          <li class="filter-completed">
+            <a href="#/completed" class="">Completed</a>
+          </li>
+        </ul>
+        <button class="clear-completed" style="display: block;">Clear completed
+        </button>
+      </footer>
+    </section>
+  </section>
+  <footer class="info">
+    <p>Double-click to edit a todo</p>
+    <p>
+      Written by
+      <a href="http://twitter.com/lukeed05">Luke Edwards</a>
+    </p>
+    <p>
+      Refactored by
+      <a href="https://github.com/xorgy">Aaron Muir Hamilton</a>
+    </p>
+    <p>
+      Part of
+      <a href="http://todomvc.com">TodoMVC</a>
+    </p>
+  </footer>
+  <!-- <script type="module" src="src/app.js"></script> -->
+  <script src="./index.js"></script>
+</body>
+</html>
