@@ -1,12 +1,10 @@
 const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-
-const config = {
+module.exports = {
   entry: './src/app.js',
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'app.js'
+    filename: 'app.js',
+    path: path.resolve(__dirname, 'dist')
   },
   module: {
     rules: [
@@ -16,12 +14,13 @@ const config = {
           'style-loader',
           'css-loader'
         ]
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          'file-loader'
+        ]
       }
     ]
-  },
-  plugins: [
-         new CleanWebpackPlugin(['dist']),
-        ],
-  mode: 'development'
+  }
 };
-module.exports = config;

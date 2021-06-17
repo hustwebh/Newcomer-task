@@ -1,4 +1,4 @@
-import { Store, Todo } from "./store.js";
+import { Store, Todo } from "./store";
 
 export class todoList {
 
