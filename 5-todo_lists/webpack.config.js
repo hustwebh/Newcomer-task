@@ -1,5 +1,4 @@
-// const path = require('path');
-// const {config} = require('process');
+const path = require('path');
 
 
 const config = {
