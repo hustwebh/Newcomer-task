@@ -7,6 +7,7 @@ export class todoList {
         this.getElements();
         this.addListenners();
         this.initList();
+        this.completeAll = false;
     }
 
     getElements() {
@@ -130,20 +131,16 @@ export class todoList {
         }
     }
 
-    // completeLi() {
-    //     let iscomplete = false;
-    //     this.todoList.querySelectorAll("li").forEach(el =>{
-    //         if (!el.classList.contains('completed')) {
-    //             // el.style.backgroundImage = `url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E')`;
-    //             // el.style.backgroundPosition = `center left`;
-    //             // el.style.backgroundRepeat = `no-repeat`;
-    //             // el.classList.add('completed')
-    //             console.log(el.children[0].onclick)
-    //             // el.children[0].onclick();
-    //         }
-    //     });
-    //     iscomplete = !iscomplete;
-    // }
+    completeLi() {
+        this.todoList.querySelectorAll("li").forEach(el => {
+            if (!el.classList.contains('completed') && !this.completeAll) {
+                this.toggleLi(el.id);
+            } else if (this.completeAll) {
+                this.toggleLi(el.id);
+            }
+        });
+        this.completeAll = !this.completeAll;
+    }
 
     editTodo(todo) { //实现对任务的编辑功能
         let li = this.todoList.querySelector(`li[id='${todo.id}']`);
