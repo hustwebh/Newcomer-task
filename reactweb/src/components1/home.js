@@ -16,12 +16,12 @@ import 'font-awesome/css/font-awesome.min.css'
 import './main.css'
 
 // 引入单个页面（包括嵌套的子页面）
-import myTable from './table.js'
-import myForm from './form.js'
-import myChart from './chart.js'
-import myAnimate from './animate.js'
-import myCalendar from './calendar.js'
-import myCard from './fetch.js'
+import myTable from './table.js.js'
+import myForm from './form.js.js'
+import myChart from './chart.js.js'
+import myAnimate from './animate.js.js'
+import myCalendar from './calendar.js.js'
+import myCard from './fetch.js.js'
 
 const ACTIVE = { color: 'red' }
 

@@ -1,4 +1,4 @@
-* {
+/* * {
   box-sizing: border-box;
 }
 
@@ -56,7 +56,7 @@ body, html, .App, #root, .auth-wrapper {
   box-shadow: none;
 } */
 
-.auth-wrapper h3 {
+/* .auth-wrapper h3 {
   text-align: center;
   margin: 0;
   line-height: 1;
@@ -93,4 +93,221 @@ body, html, .App, #root, .auth-wrapper {
 }
 .same{
   color: green;
+} */
+
+.mb_0 {
+  margin-bottom: 0 !important;
+}
+
+.logo {
+  align-items: center;
+  display: flex;
+}
+
+.logo img {
+  width: 48px;
+  height: 48px;
+}
+
+.logo span {
+  font-size: 24px;
+  padding-left: 5px;
+}
+
+.footer {
+  text-align: center;
+}
+
+.register {
+  float: right !important;
+  display: -webkit-box !important;
+}
+
+.container {
+  padding-top: 15px;
+}
+
+.leftContainer {
+  width: 400px;
+  float: left;
+}
+
+.carousel {
+  width: 400px;
+  float: left;
+  padding-bottom: 25px;
+}
+
+.carousel img {
+  width: 400px;
+  height: 260px;
+}
+
+.tabs_news {
+  padding-left: 10px;
+  width: 460px;
+  float: left;
+}
+
+.ant-card-body {
+  padding: 15px !important;
+}
+
+.ant-card-head-title {
+  font-weight: bold !important;
+  color: #666 !important;
+}
+
+.topNewsList {
+  margin-bottom: 15px;
+}
+
+.topNewsList li {
+  line-height: 26px;
+  font-size: 14px;
+  width: 420px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topNewsList a {
+  color: #666;
+}
+
+.imageblock {
+  float: left;
+}
+
+.custom-card {
+  padding: 5px;
+}
+
+.custom-card p {
+  color: #999;
+}
+
+.article {
+  text-align: justify;
+}
+
+#title {
+  margin: 16px 16px 0!important;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.article-title {
+  margin-bottom: 10px;
+}
+
+#title .title {
+  font-size: 22px;
+  line-height: 28px;
+  color: #000;
+}
+
+.article-src-time {
+  font-size: 15px;
+  color: #999;
+  padding-bottom: 10px;
+}
+
+#content {
+  margin: 15px 16px 16px;
+}
+
+.article-content .txt {
+  font-size: 16px;
+}
+
+.article-content .section {
+  line-height: 28px;
+  margin-bottom: 15px;
+  margin-top: 0;
+}
+
+.article-content .img {
+  margin-bottom: 15px;
+}
+
+.article-content .img .img-wrap {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 0;
+  overflow: hidden;
+  background-size: 40%;
+}
+
+.article-content .img .img-wrap img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  width: 60%;
+}
+
+.ant-card {
+  margin-top: 5px !important;
+}
+
+.myList {
+  padding: 40px;
+}
+
+.ant-upload-select-picture-card i {
+  font-size: 28px;
+  color: #999;
+}
+
+.ant-upload-select-picture-card .ant-upload-text {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+.tabs_product {
+  float: left;
+  padding-left: 10px;
+  width: 300px;
+}
+
+.tabs_product .ant-tabs-content {
+  margin-top: 20px;
+}
+
+.item-recommend {
+  background: #f7f7f7;
+}
+
+.productlinks-item {
+  margin-bottom: 20px;
+  padding: 13px 0 13px 10px;
+}
+
+.productlinks-item a {
+  padding: 0 6px 0 0;
+}
+
+
+/* use css to set position of modal */
+
+.vertical-center-modal {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.vertical-center-modal:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  width: 0;
+}
+
+.vertical-center-modal .ant-modal {
+  display: inline-block;
+  vertical-align: middle;
+  top: 0;
+  text-align: left;
 }
