@@ -2,6 +2,7 @@ import React from 'react';
 import {Row, Col} from 'antd';
 import PCNewsImageBlock from '../../component/pc/topcontent/pc_news_image/pc_news_imageblock';
 import Comment from '../../component/common/common_comment';
+import "./pc_news_detail.css"
 
 export default class PCNewsDetail extends React.Component {
     constructor() {
@@ -15,16 +16,12 @@ export default class PCNewsDetail extends React.Component {
         let fetchOption = {
             method: 'GET'
         };
-        fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=getnewsitem&uniquekey=" + this.props.params.uniquekey, fetchOption)
+        fetch("http://10.19.128.38:8080/news?ID="+ this.props.params.uniquekey, fetchOption)
             .then(response => response.json())
             .then(json => {
                 this.setState({newsItem: json});
-                document.title = this.state.newsItem.title + "-新闻头条";
-            });
-    }
 
-    createMarkup() {
-        return {__html: this.state.newsItem.pagecontent};
+            });
     }
 
     render() {
@@ -34,7 +31,11 @@ export default class PCNewsDetail extends React.Component {
                 <Row>
                     <Col span={2}/>
                     <Col span={14}>
-                        <div style={{marginTop: '50px'}} dangerouslySetInnerHTML={this.createMarkup()}/>
+                        <h1 className="main_title">{this.state.newsItem.title}</h1>
+                        <img className="main_pic" src={this.state.newsItem.picurl}/>
+                        <div className="text" style={{marginTop: '30px'}} >
+                            {this.state.newsItem.description}
+                        </div>
                         <Comment uniquekey={this.props.params.uniquekey}/>
                     </Col>
                     <Col span={1}/>

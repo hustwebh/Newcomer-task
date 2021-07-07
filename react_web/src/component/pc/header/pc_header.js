@@ -10,7 +10,7 @@ export default class PCHeader extends React.Component {
         super(props);
         this.state = {
             hasLogined: false,//表示是否登陆
-            userName: '', //表示用户名
+            name: '', //表示用户名
             userId: '',   //表示用户id
             current: 'top',//表示当前点击的导航
             modalVisable: false, //表示登录注册的模态框是否显示
@@ -23,8 +23,10 @@ export default class PCHeader extends React.Component {
     //此时显示用户名和退出按钮，即Logout组件
     componentWillMount() {
         //表示存在id
-        if (localStorage.userId && localStorage.userId != '') {
-            this.setState({userId: localStorage.userId, userName: localStorage.userName, hasLogined: true});
+        if (localStorage.userId != '') {
+            this.state.hasLogined = true;
+            this.state.name = localStorage.name;
+            this.state.userId = localStorage.userId;
         }
     };
 
@@ -48,22 +50,17 @@ export default class PCHeader extends React.Component {
 
     //点击登录表单中的登录按钮,直接设置为登录状态
     login(userLogin) {
-        this.setState({userName: userLogin.userName, hasLogined: true, userId: userLogin.userId});
-        localStorage.userName = userLogin.userName;
+        this.setState({name: userLogin.name, hasLogined: true, userId: userLogin.userId});
+        localStorage.name = userLogin.name;
         localStorage.userId = userLogin.userId;
     }
 
     //点击MenuItem中退出登录按钮
     logout() {
-        localStorage.userName = '';
+        localStorage.name = '';
         localStorage.userId = '';
-        this.setState({hasLogined: false, userName: '', userId: ''});
+        this.setState({hasLogined: false, name: '', userId: ''});
     };
-
-
-
-
-
 
     render() {
 
@@ -79,7 +76,7 @@ export default class PCHeader extends React.Component {
                     </Col>
                     <Col span={18}>
                        <Nav hasLogined={this.state.hasLogined} logout={this.logout.bind(this)}
-                            userName={this.state.userName} current={this.state.current}
+                            userName={this.state.name} current={this.state.current}
                             menuItemClick={this.MenuItemClick.bind(this)}/>
 
                        <LoginRegisterModal setModalVisible={this.setModalVisible.bind(this)} login={this.login.bind(this)}

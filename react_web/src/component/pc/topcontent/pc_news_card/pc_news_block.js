@@ -10,10 +10,12 @@ export default class PCNewsBlock extends React.Component {
     //页面渲染后触发
     componentDidMount() {
         let fetchOption = {method: 'GET'};
-        let url = "http://10.19.128.38:8080/news";
-        fetch(url +"?type=" + this.props.type + "&count=" + this.props.count, fetchOption)
+        const url = "http://10.19.128.38:8080";
+        fetch(url +"/news?type=" + this.props.type + "&count=" + this.props.count, fetchOption)
         .then(response => response.json())
-        .then(json => this.setState({news: json}));
+        .then(json => {
+            this.setState({news: json})
+        });
     }
 
 

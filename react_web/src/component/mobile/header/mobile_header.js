@@ -12,7 +12,7 @@ export default class MobileHeader extends React.Component {
             current: 'top',
             hasLogined: false,
             modalVisable: false,
-            userName: '',
+            name: '',
         };
     }
 
@@ -28,21 +28,23 @@ export default class MobileHeader extends React.Component {
     componentWillMount(){
         //表示存在id
         if (localStorage.userId&&localStorage.userId!='') {
-            this.setState({userId:localStorage.userId,userName:localStorage.userName,hasLogined:true});
+                this.state.hasLogined = true;
+                this.state.name = localStorage.name;
+                this.state.userId = localStorage.userId;
         }
     };
 
     //点击登录按钮
     login(userLogin){
-        this.setState({userName:userLogin.userName,hasLogined:true,userId:userLogin.userId});
-        localStorage.userName=userLogin.userName;
+        this.setState({name:userLogin.name,hasLogined:true,userId:userLogin.userId});
+        localStorage.name=userLogin.name;
         localStorage.userId=userLogin.userId;
     }
 
     logout() {
-        localStorage.userName = '';
+        localStorage.name = '';
         localStorage.userId = '';
-        this.setState({hasLogined: false, userName: '', userId: ''});
+        this.setState({hasLogined: false, name: '', userId: ''});
     };
 
     render() {

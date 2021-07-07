@@ -17,7 +17,7 @@ export default class MobileNews extends React.Component {
 
     componentDidMount() {
         let fetchOption = {method: 'GET'};
-        fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=getnews&type=" + this.props.type + "&count=" + this.state.count, fetchOption)
+        fetch("http://10.19.128.38:8080/news?environment=phone", fetchOption)
             .then(response => response.json())
             .then(json => this.setState({news: json}));
     }
@@ -30,7 +30,7 @@ export default class MobileNews extends React.Component {
         if (count>0&&count<300){
             this.setState({count:count});
             let fetchOption = {method: 'GET'};
-            fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=getnews&type=" + this.props.type + "&count=" + this.state.count, fetchOption)
+            fetch("http://10.19.128.38:8080/news?environment=phone", fetchOption)
                 .then(response => response.json())
                 .then(json => this.setState({news: json}));
             this.setState({isLoadingMore: false});
@@ -53,7 +53,7 @@ export default class MobileNews extends React.Component {
                 {
                     this.state.hasMore?
                     <LoadMore isLoading={this.state.isLoading} loadMoreFn={this.loadMoreFn.bind(this)}/>
-                    :<div style={{textAlign:'center',backgroundColor:'#F8F8F8'}}>木有更多咯</div>
+                    :<div style={{textAlign:'center',backgroundColor:'#F8F8F8'}}>没有更多咯</div>
                 }
 
             </div>

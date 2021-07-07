@@ -8,9 +8,10 @@ export default class NewsComponent extends React.Component {
     }
     render(){
         let news=this.props.news;
+        console.log(news)
         let newsList=news.map((newsItem, index) => (
             <li key={index}>
-                <Link to={`details/${newsItem.uniquekey}`} target='_blank'>
+                <Link to={`details/${newsItem.ID}`} target='_blank'>
                     {newsItem.title}
                 </Link>
             </li>

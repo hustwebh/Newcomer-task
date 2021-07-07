@@ -9,17 +9,19 @@ export default class PCNewsImageBlock extends React.Component {
 
     componentDidMount() {
         let fetchOption = {method: 'GET'};
-        let url = "http://10.19.128.38:8080/news";
-        fetch(url +"?type=" + this.props.type + "&count=" + this.props.count, fetchOption)
+        const url = "http://10.19.128.38:8080";
+        fetch(url +"/news?type=" + this.props.type + "&count=" + this.props.count, fetchOption)
         .then(response => response.json())
-        .then(json => this.setState({news: json}));
+        .then(json => {
+            this.setState({news: json})
+        });
     }
 
     render() {
         const news = this.state.news;
 
         let newsImage = news.length ?
-            <ImageNewsComponent news={news} imageWidth={this.props.imageWidth} cartTitle={this.props.cartTitle} justifyContent={this.props.justifyContent}/>
+            <ImageNewsComponent news={news} imageWidth={this.props.imageWidth} title={this.props.title} />
             : '正在加载';
 
         return (

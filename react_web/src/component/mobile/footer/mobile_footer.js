@@ -9,7 +9,7 @@ export default class MobileFooter extends React.Component{
                 <Row>
                     <Col span={2}/>
                     <Col span={20} style={{ textAlign:'center'}}>
-                        &copy;&nbsp;2018 新闻头条。All Rights Reserved.
+                        &copy;&nbsp;2021 新闻头条
                     </Col>
                     <Col span={2}/>
                 </Row>

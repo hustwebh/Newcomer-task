@@ -1,11 +1,12 @@
 import React from 'react';
-import {Icon,Form, Input, Button,Checkbox} from 'antd';
+import { Icon, Form, Input, Button, Checkbox,message} from 'antd';
 import './pc_header.css'
 //登录表单组件
 class LoginForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {hasUser: ''};
+        this.state = { hasUser: '' };
+        this.handleLoginSubmit = this.handleLoginSubmit.bind(this)
     }
 
     //motal框中的处理登录提交表单
@@ -15,21 +16,29 @@ class LoginForm extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, formData) => {
             if (!err) {
-                console.log('Received values of form: ', formData);
-                let myFetchOptions = {method: 'GET'};
-                fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=login&username=" + formData.userName + "&password=" + formData.password + "&r_userName=" + formData.r_userName + "&r_password=" + formData.r_password + "&r_confirmPassword=" + formData.r_confirmPassword, myFetchOptions)
+                let myFetchOptions = {
+                    method: 'POST',
+                    body: JSON.stringify(formData),
+                    headers:{
+                        "Content-Type":"application/json;charset=utf-8",
+                    }
+                };
+                const url = "http://10.19.128.38:8080";
+                console.log(JSON.stringify(formData))
+                fetch(url+"/sign_in", myFetchOptions)
                     .then(response => response.json())
                     .then(json => {
-                        if (json !== null) {
+                        if (json) {
+                            message.success("登录成功");
                             console.log(json);
-                            let userLogin = {userName: json.NickUserName, userId: json.UserId};
+                            let userLogin = { name: json.name, userId: json.token };
                             this.props.login(userLogin);
                             //设置模态框消失
                             this.props.setModalVisible(false);
                         }
                         else {
                             //如果json为null，表示用户名密码不存在
-                            this.setState({hasUser: '用户名或密码错误'});
+                            this.setState({ hasUser: '用户名或密码错误' });
                         }
 
                     });
@@ -40,19 +49,19 @@ class LoginForm extends React.Component {
     }
 
     render() {
-        let {getFieldDecorator} = this.props.form;
+        let { getFieldDecorator } = this.props.form;
         return (
-            <Form onSubmit={this.handleLoginSubmit.bind(this)}>
+            <Form onSubmit={this.handleLoginSubmit}>
                 <Form.Item>
-                    {getFieldDecorator('userName', {
+                    {getFieldDecorator('name', {
                         rules: [{
                             required: true,
                             message: 'Please input your username!'
                         }],
                     })(
                         <Input prefix={<Icon type="user"
-                                             style={{color: 'rgba(0,0,0,.25)'}}/>}
-                               placeholder="Username"/>
+                            style={{ color: 'rgba(0,0,0,.25)' }} />}
+                            placeholder="Username" />
                     )}
                 </Form.Item>
                 <Form.Item>
@@ -63,8 +72,8 @@ class LoginForm extends React.Component {
                         }],
                     })(
                         <Input prefix={<Icon type="lock"
-                                             style={{color: 'rgba(0,0,0,.25)'}}/>}
-                               type="password" placeholder="Password"/>
+                            style={{ color: 'rgba(0,0,0,.25)' }} />}
+                            type="password" placeholder="Password" />
                     )}
                 </Form.Item>
                 <Form.Item>
@@ -72,12 +81,12 @@ class LoginForm extends React.Component {
                         valuePropName: 'checked',
                         initialValue: true,
                     })(
-                        <Checkbox>Remember me</Checkbox>
+                        <Checkbox>记住该用户</Checkbox>
                     )}
                     <span>{this.state.hasUser}</span>
-                    <Button type="primary" htmlType="submit"
-                            className="login-form-button">
-                        Log in
+                    <Button htmlType="submit"
+                        className="login-form-button">
+                        登 录
                     </Button>
 
                 </Form.Item>

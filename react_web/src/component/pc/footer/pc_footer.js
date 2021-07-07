@@ -12,7 +12,7 @@ export default class PCFooter extends React.Component{
                 <Row>
                     <Col span={2}/>
                     <Col span={20} style={{ textAlign:'center'}}>
-                        &copy;&nbsp;2018 新闻头条。All Rights Reserved.
+                        &copy;&nbsp;欢迎来到临时构建的新闻网站
                     </Col>
                     <Col span={2}/>
                 </Row>

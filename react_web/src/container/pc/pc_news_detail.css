@@ -1,0 +1,16 @@
+.main_title{
+  width: 100%;
+  color: black;
+  margin-bottom: 30px;
+  font-size: 4em;
+  text-align: center;
+}
+.main_pic{
+  width: 70%;
+  height: 450px;
+  margin-left: 15%;
+}
+.text{
+  font-size: 2em;
+  line-height: 1.0em;
+}

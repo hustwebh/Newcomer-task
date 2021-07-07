@@ -14,7 +14,10 @@ import { message} from 'antd';
         let myFetchOptions = {
             method: 'GET'
         };
-        fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=getcomments&uniquekey=" + this.props.uniquekey, myFetchOptions).then(response => response.json()).then(json => {
+        fetch("http://10.19.128.38:8080/getcomment?ID=" + this.props.uniquekey, myFetchOptions)
+        .then(response => response.json())
+        .then(json => {
+            console.log(json)
             this.setState({comments: json});
         })
     };
@@ -26,9 +29,10 @@ import { message} from 'antd';
             method: 'GET'
         };
         //如果用户登录了
-        if(localStorage.userid!=null){
+        if(localStorage.userId!=null){
             //提交了之后发送请求添加评论
-            fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=comment&userid=" + localStorage.userid + "&uniquekey=" + this.props.uniquekey + "&commnet=" +data , myFetchOptions)
+            console.log(localStorage.name)
+            fetch("http://10.19.128.38:8080/comment?name=" + localStorage.name + "&ID=" + this.props.uniquekey + "&Comment=" +data , myFetchOptions)
                 .then(response => response.json())
                 .then(json => {
                     //请求成功之后，重新加载页面
@@ -37,7 +41,7 @@ import { message} from 'antd';
         }
         else
         {
-            message.info('请先登录哦亲~');
+            message.info('请先登录');
             return;
         }
 
@@ -47,10 +51,10 @@ import { message} from 'antd';
         const comments = this.state.comments;
         const commnetList = comments.length?
             comments.map((comment,index)=>(
-                <Card key={index} title={comment.UserName} extra={<a href="#">发布于 {comment.datetime}</a>}>
-                    <p>{comment.Commnets}</p>
+                <Card key={index} title={comment.name} extra={<a href="#">发布于 {comment.datetime}</a>}>
+                    <p>{comment.Comment}</p>
                 </Card>
-            )):'正在加载';
+            )):'';
 
 
         return (

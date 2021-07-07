@@ -17,7 +17,7 @@ import {Form, Button, Input} from 'antd';
                             message: '评论不能为空'
                         }],
                     })(
-                        <Input type='textarea' placeholder="小主快来评论吧~" />
+                        <Input type='textarea' placeholder="神评就在眼前" />
                     )}
                 </Form.Item>
                 <Button type='primary' htmlType='submit'>提交评论</Button>

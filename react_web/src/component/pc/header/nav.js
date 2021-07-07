@@ -3,12 +3,15 @@ import Logout from './LogoutComponent';
 import {Menu, Icon} from 'antd';
 import {Link} from 'react-router';
 export default class Nav extends React.Component{
+    constructor(props){
+        super(props)
+    }
     render(){
         //判断用户是否登录，用户登录就显示个人中心和退出按钮
         //用户没有登录就显示注册/登录按钮
         const userShow = this.props.hasLogined ?
             <Menu.Item key="logout">
-                <Logout logout={this.props.logout} userName={this.props.userName}/>
+                <Logout logout={this.props.logout} name={this.props.name}/>
             </Menu.Item> :
             <Menu.Item key='register'>
                 <Icon type='appstore'/>注册/登录
